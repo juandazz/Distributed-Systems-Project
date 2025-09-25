@@ -1,0 +1,10 @@
+com\example\StorageNodeApp.class
+com\example\StorageNodeRMI.class
+com\example\appserver\rmi\NodeManager.class
+com\example\IStorageNode.class
+com\example\appserver\rmi\NodeManager$NodeInfo.class
+com\example\appserver\soap\FileService.class
+com\example\appserver\rest\FileController.class
+com\example\appserver\soap\FileServiceImpl.class
+com\example\appserver\ApplicationServer.class
+com\example\appserver\rest\DatabaseClient.class
