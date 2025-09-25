@@ -1,8 +1,10 @@
 package com.example.appserver.rest;
 
+import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class DatabaseClient {
     private static final Map<String, Map<String, Long>> userFiles = new HashMap<>();
 

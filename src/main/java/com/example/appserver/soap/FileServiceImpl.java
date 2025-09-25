@@ -6,7 +6,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import javax.jws.WebService;
+import org.springframework.stereotype.Service;
 
+@Service
+@WebService(endpointInterface = "com.example.appserver.soap.FileService")
 public class FileServiceImpl implements FileService {
     private final DatabaseClient dbClient = new DatabaseClient();
     private final HttpClient httpClient = HttpClient.newBuilder()
