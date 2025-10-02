@@ -17,7 +17,7 @@ public class FileServiceImpl implements FileService {
             .connectTimeout(Duration.ofSeconds(5))
             .build();
 
-    private static final String STORAGE_BASE_URL = "http://localhost:3307";
+    private static final String STORAGE_BASE_URL = "http://localhost:8080";
 
     @Override
     public String createDirectory(String username, String path) {

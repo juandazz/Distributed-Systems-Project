@@ -74,4 +74,8 @@ public class Node implements Serializable {
     public void setUsedBytes(Long usedBytes) {
         this.usedBytes = usedBytes;
     }
+
+    public int getStorageCapacity() {
+        return (int) (capacityBytes / (1024 * 1024)); // Convert bytes to MB
+    }
 }

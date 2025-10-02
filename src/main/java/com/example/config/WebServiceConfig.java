@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 public class WebServiceConfig {
-    private static final String SOAP_URL = "http://localhost:8088/fileService";
+    private static final String SOAP_URL = "http://localhost:8090/fileService";
 
     @Autowired
     private FileServiceImpl fileService;

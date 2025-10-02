@@ -40,4 +40,18 @@ public class NodeService extends UnicastRemoteObject implements NodeInterface {
     public Node getNodeById(Integer nodeId) throws RemoteException {
         return nodes.get(nodeId);
     }
+
+    @Override
+    public String getStorageReport(Integer nodeId) throws RemoteException {
+        Node node = nodes.get(nodeId);
+        if (node != null) {
+            return "Node ID: " + node.getIdNode() +
+                   ", Hostname: " + node.getHostname() +
+                   ", IP: " + node.getIpAddress() +
+                   ", Capacity: " + node.getStorageCapacity() +
+                   ", Status: " + node.getStatus();
+        } else {
+            return "Node with ID " + nodeId + " not found.";
+        }
+    }   
 }

@@ -18,31 +18,36 @@ public class RMIConfig {
     @Value("${rmi.port:1099}")
     private int rmiPort;
     
-    @Value("${rmi.node.port:1098}")
-    private int nodeRmiPort;
-    
     @PostConstruct
     public void initRMI() {
         try {
-            // Initialize node information
+            // Inicializar información del nodo
             String hostname = InetAddress.getLocalHost().getHostName();
             String ipAddress = InetAddress.getLocalHost().getHostAddress();
-            Node node = new Node(hostname, ipAddress, 1024L * 1024L * 1024L); // 1GB capacity
-            
-            // Start Node RMI Server
-            Registry nodeRegistry = LocateRegistry.createRegistry(nodeRmiPort);
-            StorageNodeRMI storageNode = new StorageNodeRMI(node);
-            nodeRegistry.rebind("StorageNode", storageNode);
-            System.out.println("Node RMI Server started on port " + nodeRmiPort);
+            Node node = new Node(hostname, ipAddress, 1024L * 1024L * 1024L); // 1GB
 
-            // Start File Services RMI Server
-            Registry registry = LocateRegistry.createRegistry(rmiPort);
-            RMIServer.startRMIServer();
-            System.out.println("File Services RMI Server started on port " + rmiPort);
-            
+            // Crear o obtener el registro RMI en el puerto 1099
+            Registry registry;
+            try {
+                registry = LocateRegistry.createRegistry(rmiPort);
+                System.out.println("RMI Registry creado en el puerto " + rmiPort);
+            } catch (java.rmi.server.ExportException e) {
+                registry = LocateRegistry.getRegistry(rmiPort);
+                System.out.println("Usando RMI Registry existente en el puerto " + rmiPort);
+            }
+
+            // Publicar ambos servicios en el mismo registro
+            StorageNodeRMI storageNode = new StorageNodeRMI(node);
+            registry.rebind("StorageNode", storageNode);
+            System.out.println("Servicio StorageNode publicado en RMI");
+
+            com.example.service.FileServiceRMIImpl fileService = new com.example.service.FileServiceRMIImpl();
+            registry.rebind("FileService", fileService);
+            System.out.println("Servicio FileService publicado en RMI");
+
         } catch (Exception e) {
-            System.err.println("Error initializing RMI services: " + e.getMessage());
-            throw new RuntimeException("Failed to initialize RMI services", e);
+            System.err.println("Error inicializando servicios RMI: " + e.getMessage());
+            throw new RuntimeException("Fallo al inicializar servicios RMI", e);
         }
     }
 }

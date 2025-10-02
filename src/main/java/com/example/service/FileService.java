@@ -33,4 +33,17 @@ public class FileService extends UnicastRemoteObject implements FileInterface {
         // TODO: Implement file deletion logic
         return false;
     }
+
+   
+    @Override
+    public byte[] downloadFile(String path, int username) throws RemoteException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'downloadFile'");
+    }
+
+    @Override
+    public String getStorageReport(int username) throws RemoteException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getStorageReport'");
+    }
 }

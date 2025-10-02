@@ -84,4 +84,16 @@ public class FileServiceRMIImpl extends UnicastRemoteObject implements FileInter
             return "Error: " + e.getMessage();
         }
     }
+
+    @Override
+    public String getStorageReport(int username) throws RemoteException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getStorageReport'");
+    }
+
+    @Override
+    public byte[] downloadFile(String path, int username) throws RemoteException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'downloadFile'");
+    }
 }
