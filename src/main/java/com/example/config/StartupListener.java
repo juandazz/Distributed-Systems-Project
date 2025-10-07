@@ -20,7 +20,7 @@ public class StartupListener {
         System.out.println("-------------");
         System.out.println("Node ID: " + nodeId);
         System.out.println("REST API: http://localhost:" + serverPort);
-        System.out.println("SOAP Service: http://localhost:8088/fileService");
+        System.out.println("SOAP Service: http://localhost:8090/fileService");
         System.out.println("Node RMI Port: 1098");
         System.out.println("File Services RMI Port: 1099");
         System.out.println("-------------\n");
