@@ -16,7 +16,12 @@ public class FileService extends UnicastRemoteObject implements FileInterface {
 
     @Override
     public File uploadFile(byte[] fileContent, String fileName, String mimeType, Integer userId) throws RemoteException {
-        File file = new File(fileName, (long) fileContent.length, mimeType, userId);
+        // Crear un usuario temporal para la demostración
+        // En una implementación real, deberías buscar el usuario en la base de datos
+        File file = new File();
+        file.setName(fileName);
+        file.setSizeBytes((long) fileContent.length);
+        file.setMimeType(mimeType);
         file.setContent(fileContent);
         // TODO: Implement actual file storage logic using database and nodes
         return file;

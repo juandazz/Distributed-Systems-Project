@@ -2,12 +2,26 @@ package com.example.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "User")
 public class User implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
     private Integer idUser;
+    
+    @Column(name = "username", length = 45)
     private String username;
+    
+    @Column(name = "email", length = 45)
     private String email;
+    
+    @Column(name = "password_hash", length = 255)
     private String passwordHash;
+    
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
     // Constructors

@@ -23,7 +23,7 @@ public class FileServiceImpl implements FileService {
     public String createDirectory(String username, String path) {
         try {
             String fullPath = username + "/" + path;
-            String url = STORAGE_BASE_URL + "/storage/dirs?path=" + fullPath;
+            String url = STORAGE_BASE_URL + "/api/storage/directories?path=" + fullPath;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))

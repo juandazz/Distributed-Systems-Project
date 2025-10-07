@@ -24,7 +24,9 @@ public class FileServiceRMIImpl extends UnicastRemoteObject implements FileInter
             file.setName(fileName);
             file.setContent(fileContent);
             file.setMimeType(mimeType);
-            file.setUserId(userId);
+            // TODO: Aquí deberías buscar el usuario en la base de datos y asignarlo
+            // User user = userRepository.findById(userId).orElse(null);
+            // file.setUser(user);
             file.setSizeBytes((long) fileContent.length);
             file.setCreatedAt(Timestamp.from(Instant.now()));
 

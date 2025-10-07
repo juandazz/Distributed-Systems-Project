@@ -2,25 +2,44 @@ package com.example.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "File")
 public class File implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_file")
     private Integer idFile;
+    
+    @Column(name = "name", length = 45)
     private String name;
+    
+    @Column(name = "size_bytes")
     private Long sizeBytes;
+    
+    @Column(name = "mime_type", length = 45)
     private String mimeType;
+    
+    @Column(name = "created_at")
     private Timestamp createdAt;
-    private Integer userId;
-    private byte[] content;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "User_id_user", foreignKey = @ForeignKey(name = "fk_file_user"))
+    private User user;
+    
+    @Transient
+    private byte[] content; // No persistir en BD, solo en memoria
 
     // Constructors
     public File() {
     }
 
-    public File(String name, Long sizeBytes, String mimeType, Integer userId) {
+    public File(String name, Long sizeBytes, String mimeType, User user) {
         this.name = name;
         this.sizeBytes = sizeBytes;
         this.mimeType = mimeType;
-        this.userId = userId;
+        this.user = user;
     }
 
     // Getters and Setters
@@ -64,12 +83,17 @@ public class File implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // Método de conveniencia para obtener el ID del usuario
+    public Integer getUserId() {
+        return user != null ? user.getIdUser() : null;
     }
 
     public byte[] getContent() {

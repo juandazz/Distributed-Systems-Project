@@ -1,13 +1,30 @@
 package com.example.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "Node")
 public class Node implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_node")
     private Integer idNode;
+    
+    @Column(name = "hostname", length = 45)
     private String hostname;
+    
+    @Column(name = "ip_address", length = 45)
     private String ipAddress;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 45)
     private NodeStatus status;
+    
+    @Column(name = "capacity_bytes")
     private Long capacityBytes;
+    
+    @Column(name = "used_bytes")
     private Long usedBytes;
 
     public enum NodeStatus {
