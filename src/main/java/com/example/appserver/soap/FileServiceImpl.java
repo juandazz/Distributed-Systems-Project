@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import javax.jws.WebService;
+import javax.jws.WebParam;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,8 @@ public class FileServiceImpl implements FileService {
     private static final String STORAGE_BASE_URL = "http://localhost:8080";
 
     @Override
-    public String createDirectory(String username, String path) {
+    public String createDirectory(@WebParam(name = "username") String username, 
+                                @WebParam(name = "path") String path) {
         try {
             String fullPath = username + "/" + path;
             String url = STORAGE_BASE_URL + "/api/storage/directories?path=" + fullPath;
@@ -46,10 +48,17 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String uploadFile(String username, String path, byte[] data) {
+    public String uploadFile(@WebParam(name = "username") String username, 
+                           @WebParam(name = "path") String path, 
+                           @WebParam(name = "data") byte[] data) {
         try {
+            // Validar que los parámetros no sean null
+            if (username == null || path == null || data == null) {
+                return "Error: Parámetros inválidos (username, path o data son null)";
+            }
+            
             String fullPath = username + "/" + path;
-            String url = STORAGE_BASE_URL + "/storage/files?path=" + fullPath;
+            String url = STORAGE_BASE_URL + "/api/storage/files?path=" + fullPath;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -72,10 +81,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public byte[] downloadFile(String username, String path) {
+    public byte[] downloadFile(@WebParam(name = "username") String username, 
+                             @WebParam(name = "path") String path) {
         try {
             String fullPath = username + "/" + path;
-            String url = STORAGE_BASE_URL + "/storage/files?path=" + fullPath;
+            String url = STORAGE_BASE_URL + "/api/storage/files?path=" + fullPath;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -97,10 +107,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String deleteFile(String username, String path) {
+    public String deleteFile(@WebParam(name = "username") String username, 
+                           @WebParam(name = "path") String path) {
         try {
             String fullPath = username + "/" + path;
-            String url = STORAGE_BASE_URL + "/storage/files?path=" + fullPath;
+            String url = STORAGE_BASE_URL + "/api/storage/files?path=" + fullPath;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -123,7 +134,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String getStorageReport(String username) {
+    public String getStorageReport(@WebParam(name = "username") String username) {
         return dbClient.getStorageReport(username);
     }
 }
