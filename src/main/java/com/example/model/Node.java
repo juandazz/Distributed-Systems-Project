@@ -14,7 +14,6 @@ public class Node implements Serializable {
         ACTIVE, INACTIVE, MAINTENANCE
     }
 
-    // Constructors
     public Node() {
     }
 
@@ -26,7 +25,6 @@ public class Node implements Serializable {
         this.status = NodeStatus.ACTIVE;
     }
 
-    // Getters and Setters
     public Integer getIdNode() {
         return idNode;
     }
