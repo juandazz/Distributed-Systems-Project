@@ -54,8 +54,9 @@ public class FileController {
                     return ResponseEntity.status(500).body("Error connecting to RMI service: " + e.getMessage());
                 }
             } else {
-                // SOAP fallback
-                String result = soapFileService.uploadFile(username, path, fileData);
+                // SOAP fallback - convertir byte[] a Base64
+                String base64Data = java.util.Base64.getEncoder().encodeToString(fileData);
+                String result = soapFileService.uploadFile(username, path, base64Data);
                 return ResponseEntity.ok(result);
             }
         } catch (Exception e) {

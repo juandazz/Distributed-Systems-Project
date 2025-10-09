@@ -9,7 +9,7 @@ public interface FileService {
                                     @WebParam(name = "path") String path);
     @WebMethod String uploadFile(@WebParam(name = "username") String username, 
                                @WebParam(name = "path") String path, 
-                               @WebParam(name = "data") byte[] data);
+                               @WebParam(name = "data") String data);
     @WebMethod byte[] downloadFile(@WebParam(name = "username") String username, 
                                  @WebParam(name = "path") String path);
     @WebMethod String deleteFile(@WebParam(name = "username") String username, 

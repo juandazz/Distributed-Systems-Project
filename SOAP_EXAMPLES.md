@@ -9,8 +9,8 @@
    <soap:Header/>
    <soap:Body>
       <file:downloadFile>
-         <file:username>test-user</file:username>
-         <file:path>/documents/ejemplo.txt</file:path>
+         <file:username>testuser</file:username>
+         <file:path>documents/test.txt</file:path>
       </file:downloadFile>
    </soap:Body>
 </soap:Envelope>
@@ -22,11 +22,19 @@
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
    <soap:Body>
       <ns2:downloadFileResponse xmlns:ns2="http://soap.appserver.example.com/">
-         <return>BASE64_ENCODED_FILE_DATA</return>
+         <return>QXJjaGl2byBkZSBwcnVlYmEgZGlzdHJpYnVpZG9z</return>
       </ns2:downloadFileResponse>
    </soap:Body>
 </soap:Envelope>
 ```
+
+### Mejoras implementadas en downloadFile:
+- ✅ **Lectura desde almacenamiento local primero** - Mayor velocidad y eficiencia
+- ✅ **Fallback a almacenamiento remoto** - Redundancia y disponibilidad  
+- ✅ **Normalización de rutas** - Maneja separadores "/" y "\"
+- ✅ **Validación de seguridad** - Previene acceso a rutas peligrosas
+- ✅ **Manejo robusto de errores** - Mensajes detallados y logging
+- ✅ **Compatibilidad con estructura de directorios** - Funciona con paths anidados
 
 ## 2. Subir Archivo (Upload File)
 

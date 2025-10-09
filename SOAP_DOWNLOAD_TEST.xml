@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+               xmlns:file="http://soap.appserver.example.com/">
+   <soap:Header/>
+   <soap:Body>
+      <file:downloadFile>
+         <file:username>testuser</file:username>
+         <file:path>documents/test.txt</file:path>
+      </file:downloadFile>
+   </soap:Body>
+</soap:Envelope>
