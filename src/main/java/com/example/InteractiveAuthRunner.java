@@ -48,7 +48,7 @@ public class InteractiveAuthRunner implements CommandLineRunner {
         System.out.println("Servicios disponibles:");
         System.out.println("- Servidor RMI en puerto 1099");
         System.out.println("- Servicio SOAP en puerto 8090");
-        System.out.println("- API REST en puerto 8080");
+        System.out.println("- API REST en puerto 8081");
         System.out.println("- Base de datos MySQL conectada");
         System.out.println("\nPresiona Ctrl+C para detener el sistema.");
         

@@ -1,6 +1,7 @@
 package com.example.appserver.soap;
 
 import com.example.appserver.rest.DatabaseClient;
+import java.io.File;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,33 +19,68 @@ public class FileServiceImpl implements FileService {
             .connectTimeout(Duration.ofSeconds(5))
             .build();
 
-    private static final String STORAGE_BASE_URL = "http://localhost:8080";
+    private static final String STORAGE_BASE_URL = "http://localhost:8081";
 
     @Override
     public String createDirectory(@WebParam(name = "username") String username, 
                                 @WebParam(name = "path") String path) {
         try {
-            String fullPath = username + "/" + path;
-            String url = STORAGE_BASE_URL + "/api/storage/directories?path=" + fullPath;
+            // Validar parámetros
+            if (username == null || username.trim().isEmpty()) {
+                return "Error: Username no puede estar vacío";
+            }
+            if (path == null || path.trim().isEmpty()) {
+                return "Error: Path no puede estar vacío";
+            }
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .POST(HttpRequest.BodyPublishers.noBody())
-                    .timeout(Duration.ofSeconds(10))
-                    .build();
+            // Normalizar la ruta
+            String normalizedPath = path.replace("\\", "/");
+            if (normalizedPath.startsWith("/")) {
+                normalizedPath = normalizedPath.substring(1);
+            }
+            if (normalizedPath.endsWith("/")) {
+                normalizedPath = normalizedPath.substring(0, normalizedPath.length() - 1);
+            }
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            // Validar que la ruta no contenga elementos peligrosos
+            if (normalizedPath.contains("..") || normalizedPath.contains("//")) {
+                return "Error: Ruta inválida - contiene elementos de navegación no permitidos";
+            }
 
-            if (response.statusCode() == 200 || response.statusCode() == 201) {
-                dbClient.createDirectory(username, path);
-                return "Directorio creado";
+            // Crear la ruta completa del directorio
+            File baseDir = new File("storage/" + username);
+            File targetDir = new File(baseDir, normalizedPath);
+
+            // Crear directorios padre si no existen
+            if (targetDir.mkdirs() || targetDir.exists()) {
+                // También crear en el storage remoto
+                String fullPath = username + "/" + normalizedPath;
+                String url = STORAGE_BASE_URL + "/api/storage/directories?path=" + fullPath;
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .POST(HttpRequest.BodyPublishers.noBody())
+                        .timeout(Duration.ofSeconds(10))
+                        .build();
+
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                
+                // Guardar en base de datos independientemente del resultado del storage remoto
+                dbClient.createDirectory(username, normalizedPath);
+                
+                if (response.statusCode() == 200 || response.statusCode() == 201) {
+                    return "Directory created successfully: " + normalizedPath;
+                } else {
+                    System.err.println("Warning - Remote storage error: " + response.statusCode() + " - " + response.body());
+                    return "Directory created locally: " + normalizedPath + " (Warning: Remote sync failed)";
+                }
             } else {
-                System.err.println("Error del storage: " + response.statusCode() + " - " + response.body());
+                return "Failed to create directory: " + normalizedPath;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return "Error creating directory: " + e.getMessage();
         }
-        return "Error al crear directorio";
     }
 
     @Override
