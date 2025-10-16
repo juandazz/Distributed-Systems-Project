@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.model.User;
 import com.example.service.AuthService;
+import com.example.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,9 @@ public class AuthController {
     
     @Autowired
     private AuthService authService;
+    
+    @Autowired
+    private JwtService jwtService;
     
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, String> request) {
@@ -68,8 +72,13 @@ public class AuthController {
             
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
+                
+                // Generar token JWT
+                String token = jwtService.generateToken(user.getUsername(), user.getIdUser().longValue());
+                
                 response.put("status", "success");
                 response.put("message", "Login exitoso");
+                response.put("token", token);
                 response.put("user", Map.of(
                     "id", user.getIdUser(),
                     "username", user.getUsername(),
@@ -98,5 +107,42 @@ public class AuthController {
         response.put("username", username);
         
         return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/validate-token")
+    public ResponseEntity<Map<String, Object>> validateToken(@RequestHeader("Authorization") String authHeader) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            String token = jwtService.extractTokenFromHeader(authHeader);
+            
+            if (token == null) {
+                response.put("status", "error");
+                response.put("message", "Token no encontrado en el header Authorization");
+                return ResponseEntity.badRequest().body(response);
+            }
+            
+            if (jwtService.validateToken(token)) {
+                String username = jwtService.extractUsername(token);
+                Long userId = jwtService.extractUserId(token);
+                
+                response.put("status", "success");
+                response.put("message", "Token válido");
+                response.put("user", Map.of(
+                    "id", userId,
+                    "username", username
+                ));
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("status", "error");
+                response.put("message", "Token inválido o expirado");
+                return ResponseEntity.status(401).body(response);
+            }
+            
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "Error al validar token: " + e.getMessage());
+            return ResponseEntity.status(401).body(response);
+        }
     }
 }

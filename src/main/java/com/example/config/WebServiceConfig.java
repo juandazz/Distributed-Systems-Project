@@ -5,19 +5,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import javax.xml.ws.Endpoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 public class WebServiceConfig {
-    private static final String SOAP_URL = "http://localhost:8090/fileService";
+    
+    @Value("${soap.port:8090}")
+    private int soapPort;
 
     @Autowired
     private FileServiceImpl fileService;
 
     @Bean
     public Endpoint soapEndpoint() {
+        String soapUrl = "http://localhost:" + soapPort + "/fileService";
         Endpoint endpoint = Endpoint.create(fileService);
-        endpoint.publish(SOAP_URL);
-        System.out.println("SOAP Service published at: " + SOAP_URL);
+        endpoint.publish(soapUrl);
+        System.out.println("SOAP Service published at: " + soapUrl);
         return endpoint;
     }
 }

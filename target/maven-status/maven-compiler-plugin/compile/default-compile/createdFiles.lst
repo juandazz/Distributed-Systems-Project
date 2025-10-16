@@ -1,11 +1,13 @@
 com\example\model\File.class
 com\example\controller\AuthController.class
+com\example\model\StorageNode.class
 com\example\service\NodeService.class
 com\example\repository\FileRepository.class
 com\example\config\WebServiceConfig.class
 com\example\RMIServer.class
 com\example\appserver\config\AppConfig.class
 com\example\service\ConsoleAuthService.class
+com\example\service\LoadBalancerService.class
 com\example\IStorageNode.class
 com\example\service\AuthService.class
 com\example\appserver\interfaces\NodeInterface.class
@@ -21,8 +23,10 @@ com\example\appserver\rmi\NodeManager$NodeInfo.class
 com\example\model\Share.class
 com\example\appserver\rest\FileController.class
 com\example\model\User.class
+com\example\service\JwtService.class
 com\example\config\StartupListener.class
 com\example\appserver\rest\DatabaseClient.class
+com\example\config\CorsConfig.class
 com\example\service\FileServiceRMIImpl.class
 com\example\service\FileService.class
 com\example\InteractiveAuthRunner.class
@@ -32,4 +36,6 @@ com\example\model\Node.class
 com\example\repository\UserRepository.class
 com\example\StorageNodeApp.class
 com\example\appserver\soap\FileService.class
+com\example\model\StorageNode$NodeStatus.class
 com\example\appserver\soap\FileServiceImpl.class
+com\example\controller\ClusterController.class
